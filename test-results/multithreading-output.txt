@@ -1,0 +1,81 @@
+/Users/ngandieukieu/Library/Java/JavaVirtualMachines/openjdk-26.0.2.1/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=53952 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/ngandieukieu/Desktop/Github/Concurrent-Banking-Transactions-Processing /out/production/Concurrent-Banking-Transactions-Processing Main
+Khách hàng:
+Customer1 001215000001
+Customer2 001215000002
+Tài khoản:
+001215000001 | 123456 | SAVINGS | 	10,000,000.00đ
+001215000002 | 123457 | SAVINGS | 	15,000,000.00đ
+==========Tasks Run===========
+==========Tasks Run===========
+==========Tasks Run===========
+==========Tasks Run===========
+Số dư ban đầu: 123456 là: 10,000,000.00
+Số dư ban đầu: 123456 là: 10,000,000.00
+Số dư ban đầu: 123456 là: 10,000,000.00
+Số dư ban đầu: 123457 là: 15,000,000.00
+Số dư ban đầu: 123456 là: 10,000,000.00
+Số dư ban đầu: 123457 là: 15,000,000.00
+Số dư ban đầu: 123457 là: 15,000,000.00
+Số dư ban đầu: 123457 là: 15,000,000.00
+Giao dịch rút tài khoản 123456 thành công 3,000,000.00
+Giao dịch nạp 123457 thành công 1,000,000.00
+Giao dịch nạp 123457 thành công 1,000,000.00
+Giao dịch rút tài khoản 123456 thành công 3,000,000.00
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457
+Nhiệm vụ 1 cập nhật số dư sau chuyển 1tr: 123456 là: 2,000,000.00
+Nhiệm vụ 1 cập nhật số dư sau nhận 1tr: 123457 là: 17,000,000.00
+Nhiệm vụ 4 cập nhật số dư sau rút 2tr: 123456 là: 2,000,000.00
+Nhiệm vụ 3 cập nhật số dư sau chuyển 1tr: 123456 là: 2,000,000.00
+Nhiệm vụ 3 cập nhật số dư sau nhận 1tr: 123457 là: 17,000,000.00
+Nhiệm vụ 2 cập nhật số dư sau rút 2tr: 123456 là: 2,000,000.00
+Task 2 chạy trên pool-1-thread-2
+Task 1 chạy trên pool-1-thread-1
+Task 3 chạy trên pool-1-thread-3
+Task 4 chạy trên pool-1-thread-4
+==========Tasks Run===========
+==========Tasks Run===========
+Số dư ban đầu: 123456 là: 2,000,000.00
+==========Tasks Run===========
+Số dư ban đầu: 123457 là: 17,000,000.00
+==========Tasks Run===========
+Số dư ban đầu: 123456 là: 2,000,000.00
+Giao dịch nạp 123457 thành công 1,000,000.00
+Số dư ban đầu: 123456 là: 2,000,000.00
+Số dư ban đầu: 123456 là: 1,000,000.00
+Số dư ban đầu: 123457 là: 18,000,000.00
+Số dư ban đầu: 123457 là: 18,000,000.00
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457
+Giao dịch rút tài khoản 123456 không thành công 3,000,000.00
+Số dư ban đầu: 123457 là: 18,000,000.00
+Nhiệm vụ 5 cập nhật số dư sau chuyển 1tr: 123456 là: 1,000,000.00
+Nhiệm vụ 8 cập nhật số dư sau rút 2tr: 123456 là: .00
+Task 8 chạy trên pool-1-thread-1
+Giao dịch rút tài khoản 123456 không thành công 3,000,000.00
+==========Tasks Run===========
+Giao dịch nạp 123457 thành công 1,000,000.00
+Nhiệm vụ 6 cập nhật số dư sau rút 2tr: 123456 là: .00
+Task 6 chạy trên pool-1-thread-2
+Nhiệm vụ 5 cập nhật số dư sau nhận 1tr: 123457 là: 19,000,000.00
+Task 5 chạy trên pool-1-thread-4
+Số dư ban đầu: 123456 là: .00
+==========Tasks Run===========
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457
+Số dư ban đầu: 123456 là: .00
+Số dư ban đầu: 123457 là: 19,000,000.00
+Số dư ban đầu: 123457 là: 19,000,000.00
+Giao dịch rút tài khoản 123456 không thành công 3,000,000.00
+Giao dịch chuyển 123456 không thành công 1,000,000.00 đến tài khoản 123457
+Nhiệm vụ 7 cập nhật số dư sau chuyển 1tr: 123456 là: .00
+Nhiệm vụ 10 cập nhật số dư sau rút 2tr: 123456 là: .00
+Task 10 chạy trên pool-1-thread-2
+Nhiệm vụ 9 cập nhật số dư sau chuyển 1tr: 123456 là: .00
+Nhiệm vụ 7 cập nhật số dư sau nhận 1tr: 123457 là: 19,000,000.00
+Nhiệm vụ 9 cập nhật số dư sau nhận 1tr: 123457 là: 19,000,000.00
+Task 9 chạy trên pool-1-thread-1
+Task 7 chạy trên pool-1-thread-3
+=========Final Balance=========
+123456 : .00
+123457 : 19,000,000.00
+
+Process finished with exit code 0

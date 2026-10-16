@@ -1,0 +1,182 @@
+package vn.bank.digitalbank.models;
+
+
+import vn.bank.digitalbank.commons.Utils;
+import vn.bank.digitalbank.exceptions.AccountNumberNotValidException;
+
+import java.util.List;
+
+public class Customer{
+
+    private final String name;
+
+    private final String customerId;
+
+    List<Account> accountsOfCustomer;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + customerId;
+    }
+
+    /**
+     * Tạo KH theo mã CC và tên
+     * @param name tên KH
+     * @param customerId mã CC
+     */
+    public Customer(String customerId, String name) {
+        this.name = name;
+        this.customerId = customerId;
+        this.accountsOfCustomer = DigitalBank.getAccountsById(customerId);
+    }
+
+    public void showAccounts() {
+        List<Account> accounts = DigitalBank.getAccounts();
+        // Hiển thị thông tin KH
+        System.out.println(customerId
+                + " | " + name
+                + " | " + isPremium(accountsOfCustomer)
+                + " | " + Utils.formatBalance(getSumBalance(accountsOfCustomer)) + "đ");
+
+        // Hiển thị thông tin TK
+        for (int i = 0; i < accounts.size(); i++) {
+
+            Account account = accounts.get(i);
+            System.out.println((i + 1) + "\t" + account.toString());
+
+        }
+    }
+
+    public boolean addAccount(String accountNumber,
+                              String type) {
+        try {
+            Account newAccount = DigitalBank.getAccountByNumber(accountNumber);
+            DigitalBank.getAccounts().add(newAccount);
+            System.out.println("Đã thêm tài khoản " + accountNumber);
+            return true;
+        } catch (AccountNumberNotValidException exc) {
+            System.out.println(exc.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Kiểm tra KH là Premium hay Normal
+     * @param accounts danh sách TK
+     * @return phân loại KH
+     */
+    public String isPremium(List<Account> accountsOfCustomer) {
+        boolean check = accountsOfCustomer.stream()
+                .anyMatch(account -> account.getBalance() >= account.getBALANCE_PREMIUM());
+        if (check) {
+            return "PREMIUM";
+        } else {
+            return "NORMAL";
+        }
+    }
+
+    /**
+     * Tính tổng số dư các TK
+     * @param accounts danh sách TK
+     * @return tổng số dư các TK
+     */
+    public double getSumBalance(List<Account> accountsOfCustomer) {
+        double balance = 0;
+
+        for(Account acc : accountsOfCustomer) {
+            balance += acc.getBalance() ;
+        }
+
+        return balance;
+
+    }
+
+    public Account getAccountByNumber(String accountNumber) {
+        return accountsOfCustomer.stream()
+                .filter(acc -> accountNumber.equals(acc.getAccountNumber()))
+                .findFirst()
+                .orElseThrow(() -> new AccountNumberNotValidException(
+                        "Tài khoản không tồn tại " + accountNumber
+                ));
+    }
+
+    /**
+     * Hiện thông tin KH và TK
+     * Hiện lịch sử giao dịch từng TK
+     */
+    public void displayTransactionInformation(List<Account> accountsOfCustomer)  {
+
+        // Hiện thông tin KH và TK
+        showAccounts();
+
+        // Hiện lịch sử giao dịch của KH
+        accountsOfCustomer.forEach(Account::displayTransactions);
+
+    }
+
+    public void withdraw(String accountNumber,
+                         double amount) {
+        try {
+            Account accountToWithdraw = DigitalBank.getAccountByNumber(accountNumber);
+            accountToWithdraw.withdraw(amount);
+        } catch (AccountNumberNotValidException exc) {
+            System.out.println(exc.getMessage());
+        }
+    }
+
+    public void transfer(String accountReceiver,
+                         String accountTransfer,
+                         double amount) {
+        Account accountToReceive = null;
+        try {
+            accountToReceive = DigitalBank.getAccountByNumber(accountReceiver);
+        } catch (AccountNumberNotValidException exc) {
+            System.out.println(exc.getMessage());
+        }
+
+        try {
+            Account accountToTransfer = DigitalBank.getAccountByNumber(accountTransfer);
+            accountToTransfer.transfer(amount, accountToReceive);
+        } catch (AccountNumberNotValidException exc) {
+            System.out.println(exc.getMessage());
+        }
+    }
+
+    public void deposit(String accountNumber,
+                         double amount) {
+        try {
+            Account accountToDeposit = DigitalBank.getAccountByNumber(accountNumber);
+            accountToDeposit.deposit(amount);
+        } catch (AccountNumberNotValidException exc) {
+            System.out.println(exc.getMessage());
+        }
+    }
+
+    public static boolean validateAccountNumber(String accountNumber) {
+
+        // Kiểm tra có đúng 6 ký tự không
+        if (accountNumber.length() != 6) {
+            return false;
+        }
+
+        // Kiểm tra từng ký tự có phải chữ số không
+        for (int i = 0; i < accountNumber.length(); i++) {
+            if (accountNumber.charAt(i) < '0'
+                    || accountNumber.charAt(i) > '9') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+}
