@@ -1,4 +1,4 @@
-################################# Version 2 - Synchronize transactions on the same account using synchronized ####################
+#########Version 2 - Synchronize transactions on the same account using synchronized #########
 
 Use synchronized with individual account locks to protect each account's balance update. But does not guarantee that a transfer between 2 accounts is atomic
 
@@ -19,7 +19,7 @@ Deadlock happens when 2 accounts transfer to each other at same time: each hold 
 
   
 
-################################################# Version 1 - Concurrent Transaction Processing #######################
+#############Version 1 - Concurrent Transaction Processing ################
 
 The goal is to test how multiple transaction affect the same bank account and different accounts when executed concurrently. And result is that concurrent transactions can lead to race condition that can lead to incorrect account balances.
 
