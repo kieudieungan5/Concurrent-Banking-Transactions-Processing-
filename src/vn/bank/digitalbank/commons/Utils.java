@@ -68,6 +68,10 @@ public class Utils {
      */
     public static String formatBalance(double amount) {
 
+        if(amount == 0) {
+            return "00.00";
+        }
+
         DecimalFormat df = new DecimalFormat("#,###.00");
         return df.format(amount);
 

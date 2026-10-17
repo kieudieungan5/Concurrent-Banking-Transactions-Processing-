@@ -61,6 +61,18 @@ public class Main {
         List<Future<?>> futures = new ArrayList<>();
 
         /**
+         * See initial balance
+         */
+        System.out.println("Số dư ban đầu: "
+                + account1.getAccountNumber()
+                + " là: "
+                + Utils.formatBalance(account1.getBalance()));
+        System.out.println("Số dư ban đầu: "
+                + account2.getAccountNumber()
+                + " là: "
+                + Utils.formatBalance(account2.getBalance()));
+
+        /**
          * Transactions Test
          */
         for (int i = 1; i <= 10; i++) {
@@ -68,50 +80,47 @@ public class Main {
 
             Future<?> future = pool.submit(() -> {
 
-                System.out.println("==========Tasks Run===========");
-                System.out.println("Số dư ban đầu: "
-                        + account1.getAccountNumber()
-                        + " là: "
-                        + Utils.formatBalance(account1.getBalance()));
-                System.out.println("Số dư ban đầu: "
-                        + account2.getAccountNumber()
-                        + " là: "
-                        + Utils.formatBalance(account2.getBalance()));
-
                 if (transactionId % 2 == 0) {
                     bank.withdraw(account1.getCustomerId(),
                             account1.getAccountNumber(),
                             3_000_000);
-                    System.out.println("Nhiệm vụ "
-                            + transactionId
-                            + " cập nhật số dư sau rút 2tr: "
-                            + account1.getAccountNumber()
-                            + " là: "
-                            + Utils.formatBalance(account1.getBalance()));
                 } else {
                     bank.transfer(account1.getCustomerId(),
                             account2.getAccountNumber(),
                             account1.getAccountNumber(),
                             1000_000);
-                    System.out.println("Nhiệm vụ "
-                            + transactionId
-                            + " cập nhật số dư sau chuyển 1tr: "
-                            + account1.getAccountNumber()
-                            + " là: "
-                            + Utils.formatBalance(account1.getBalance()));
-
-                    System.out.println("Nhiệm vụ "
-                            + transactionId
-                            + " cập nhật số dư sau nhận 1tr: "
-                            + account2.getAccountNumber()
-                            + " là: "
-                            + Utils.formatBalance(account2.getBalance()));
                 }
 
-                System.out.println(
-                        "Task " + transactionId
-                                + " chạy trên "
-                                + Thread.currentThread().getName());
+//                System.out.println(
+//                        "Task " + transactionId
+//                                + " chạy trên "
+//                                + Thread.currentThread().getName());
+            });
+
+            futures.add(future);
+
+
+        }
+        for (int i = 1; i <= 10; i++) {
+            int transactionId = i;
+
+            Future<?> future = pool.submit(() -> {
+
+                if (transactionId % 2 == 0) {
+                    bank.withdraw(account2.getCustomerId(),
+                            account2.getAccountNumber(),
+                            3_000_000);
+                } else {
+                    bank.transfer(account2.getCustomerId(),
+                            account1.getAccountNumber(),
+                            account2.getAccountNumber(),
+                            1000_000);
+                }
+
+//                System.out.println(
+//                        "Task " + transactionId
+//                                + " chạy trên "
+//                                + Thread.currentThread().getName());
             });
 
             futures.add(future);
@@ -132,7 +141,7 @@ public class Main {
                 future.get();
 //                System.out.println("Task hoàn thành bình thường");
             } catch (InterruptedException e) {
-
+                System.out.println("Task bị ngắt");
             } catch (ExecutionException e) {
                 System.out.println("Task gặp lỗi: " + e.getCause());
             }

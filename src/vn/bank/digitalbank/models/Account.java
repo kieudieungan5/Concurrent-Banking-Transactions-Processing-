@@ -106,87 +106,106 @@ public class Account {
     }
 
     public void withdraw(double amount) {
-        if(!checkAmountNotValid(amount)) {
-            balance -= amount;
-            System.out.println("Giao dịch rút tài khoản "
-                    + accountNumber
-                    + " thành công "
-                    + Utils.formatBalance(amount));
-            transactions.add(new Transaction (WITHDRAW,
-                    accountNumber,
-                    amount,
-                    Utils.getDateTime(),
-                    "Thành công"));
-        } else {
-            System.out.println("Giao dịch rút tài khoản "
-                    + accountNumber
-                    + " không thành công "
-                    + Utils.formatBalance(amount));
-            transactions.add(new Transaction (WITHDRAW,
-                    accountNumber,
-                    amount,
-                    Utils.getDateTime(),
-                    "Không hợp lệ"));
+        synchronized(this) {
+            if(!checkAmountNotValid(amount)) {
+                balance -= amount;
+
+                System.out.println("Giao dịch rút tài khoản "
+                        + accountNumber
+                        + " thành công "
+                        + Utils.formatBalance(amount)
+                        + " . Số dư hiện tại: "
+                        + Utils.formatBalance(balance));
+                transactions.add(new Transaction (WITHDRAW,
+                        accountNumber,
+                        amount,
+                        Utils.getDateTime(),
+                        "Thành công"));
+            } else {
+                System.out.println("Giao dịch rút tài khoản "
+                        + accountNumber
+                        + " không thành công "
+                        + Utils.formatBalance(amount)
+                        + " . Số dư hiện tại: "
+                        + Utils.formatBalance(balance));
+                transactions.add(new Transaction (WITHDRAW,
+                        accountNumber,
+                        amount,
+                        Utils.getDateTime(),
+                        "Không hợp lệ"));
+            }
         }
     }
 
     public void transfer(double amount,
                          Account accountToReceive) {
-        if(checkAmountNotValid(amount)) {
-            System.out.println("Giao dịch chuyển "
-                    + accountNumber
-                    + " không thành công " + Utils.formatBalance(amount)
-                    + " đến tài khoản "
-                    + accountToReceive.getAccountNumber());
-            transactions.add(new Transaction (TRANSFER,
-                    accountNumber,
-                    amount,
-                    Utils.getDateTime(),
-                    "Không hợp lệ"));
-        } else {
-            balance -= amount;
-            accountToReceive.deposit(amount);
-            System.out.println("Giao dịch chuyển "
-                    + accountNumber
-                    + " thành công " + Utils.formatBalance(amount)
-                    + " đến tài khoản "
-                    + accountToReceive.getAccountNumber());
-            transactions.add(new Transaction (TRANSFER,
-                    accountNumber,
-                    amount,
-                    Utils.getDateTime(),
-                    "Thành công"));
+        synchronized(this) {
+            if(checkAmountNotValid(amount)) {
+                System.out.println("Giao dịch chuyển "
+                        + accountNumber
+                        + " không thành công " + Utils.formatBalance(amount)
+                        + " đến tài khoản "
+                        + accountToReceive.getAccountNumber()
+                        + " . Số dư hiện tại: "
+                        + Utils.formatBalance(balance));
+                transactions.add(new Transaction (TRANSFER,
+                        accountNumber,
+                        amount,
+                        Utils.getDateTime(),
+                        "Không hợp lệ"));
+            } else {
+                balance -= amount;
+                System.out.println("Giao dịch chuyển "
+                        + accountNumber
+                        + " thành công " + Utils.formatBalance(amount)
+                        + " đến tài khoản "
+                        + accountToReceive.getAccountNumber()
+                        + " . Số dư hiện tại: "
+                        + Utils.formatBalance(balance));
+                transactions.add(new Transaction (TRANSFER,
+                        accountNumber,
+                        amount,
+                        Utils.getDateTime(),
+                        "Thành công"));
 
-            accountToReceive.getTransactions().add(new Transaction (DEPOSIT,
-                    accountToReceive.getAccountNumber(),
-                    amount,
-                    Utils.getDateTime(),
-                    "Thành công"));
+                accountToReceive.deposit(amount);
+                accountToReceive.getTransactions().add(new Transaction (DEPOSIT,
+                        accountToReceive.getAccountNumber(),
+                        amount,
+                        Utils.getDateTime(),
+                        "Thành công"));
+            }
         }
     }
 
     public void deposit(double amount) {
-        if(!checkAmountDepositNotValid(amount)) {
-            balance += amount;
-            System.out.println("Giao dịch nạp "
-                    + accountNumber
-                    + " thành công "
-                    + Utils.formatBalance(amount));
-            transactions.add(new Transaction (DEPOSIT,
-                    accountNumber,
-                    amount,
-                    Utils.getDateTime(),
-                    "Thành công"));
-        } else {
-            System.out.println("Giao dịch nạp "
-                    + accountNumber
-                    + " không thành công "
-                    + Utils.formatBalance(amount));
-            transactions.add(new Transaction (DEPOSIT,
-                    accountNumber,
-                    amount,
-                    Utils.getDateTime(),
-                    "Không hợp lệ"));
+        synchronized(this) {
+            if(!checkAmountDepositNotValid(amount)) {
+                balance += amount;
+                System.out.println("Giao dịch nhận "
+                        + accountNumber
+                        + " thành công "
+                        + Utils.formatBalance(amount)
+                        + " . Số dư hiện tại: "
+                        + Utils.formatBalance(balance));
+                transactions.add(new Transaction (DEPOSIT,
+                        accountNumber,
+                        amount,
+                        Utils.getDateTime(),
+                        "Thành công"));
+            } else {
+                System.out.println("Giao dịch nhận "
+                        + accountNumber
+                        + " không thành công "
+                        + Utils.formatBalance(amount)
+                        + " . Số dư hiện tại: "
+                        + Utils.formatBalance(balance));
+                transactions.add(new Transaction (DEPOSIT,
+                        accountNumber,
+                        amount,
+                        Utils.getDateTime(),
+                        "Không hợp lệ"));
+            }
         }
     }
 
