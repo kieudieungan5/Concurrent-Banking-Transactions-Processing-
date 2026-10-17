@@ -28,9 +28,9 @@ public class Customer{
     }
 
     /**
-     * Tạo KH theo mã CC và tên
-     * @param name tên KH
-     * @param customerId mã CC
+     * Create Customer
+     * @param name name
+     * @param customerId id
      */
     public Customer(String customerId, String name) {
         this.name = name;
@@ -69,9 +69,9 @@ public class Customer{
     }
 
     /**
-     * Kiểm tra KH là Premium hay Normal
-     * @param accounts danh sách TK
-     * @return phân loại KH
+     * Check is Customer is premium or not
+     * @param accounts list accounts of customer
+     * @return PREMIUM / NORMAL
      */
     public String isPremium(List<Account> accountsOfCustomer) {
         boolean check = accountsOfCustomer.stream()
@@ -84,9 +84,9 @@ public class Customer{
     }
 
     /**
-     * Tính tổng số dư các TK
-     * @param accounts danh sách TK
-     * @return tổng số dư các TK
+     * Get sum of balance on all accounts of one customer
+     * @param accounts list accounts
+     * @return sum of balance
      */
     public double getSumBalance(List<Account> accountsOfCustomer) {
         double balance = 0;
@@ -108,20 +108,22 @@ public class Customer{
                 ));
     }
 
+//    public void displayTransactionInformation(List<Account> accountsOfCustomer)  {
+//
+//        // Hiện thông tin KH và TK
+//        showAccounts();
+//
+//        // Hiện lịch sử giao dịch của KH
+//        accountsOfCustomer.forEach(Account::displayTransactions);
+//
+//    }
+
     /**
-     * Hiện thông tin KH và TK
-     * Hiện lịch sử giao dịch từng TK
+     * Check Account is existed or not
+     * If yes, call Account.withdraw()
+     * @param accountNumber number of account
+     * @param amount to withdraw
      */
-    public void displayTransactionInformation(List<Account> accountsOfCustomer)  {
-
-        // Hiện thông tin KH và TK
-        showAccounts();
-
-        // Hiện lịch sử giao dịch của KH
-        accountsOfCustomer.forEach(Account::displayTransactions);
-
-    }
-
     public void withdraw(String accountNumber,
                          double amount) {
         try {
@@ -132,6 +134,13 @@ public class Customer{
         }
     }
 
+    /**
+     * Check Account is existed or not
+     * If yes, call Account.transfer()
+     * @param accountReceiver number of account to receive
+     * @param accountTransfer number of account to transfer
+     * @param amount to transfer
+     */
     public void transfer(String accountReceiver,
                          String accountTransfer,
                          double amount) {
@@ -150,6 +159,12 @@ public class Customer{
         }
     }
 
+    /**
+     * Check Account is existed or not
+     * If yes, call Account.deposit()
+     * @param accountNumber number of account
+     * @param amount to deposit
+     */
     public void deposit(String accountNumber,
                          double amount) {
         try {
@@ -161,13 +176,10 @@ public class Customer{
     }
 
     public static boolean validateAccountNumber(String accountNumber) {
-
-        // Kiểm tra có đúng 6 ký tự không
         if (accountNumber.length() != 6) {
             return false;
         }
 
-        // Kiểm tra từng ký tự có phải chữ số không
         for (int i = 0; i < accountNumber.length(); i++) {
             if (accountNumber.charAt(i) < '0'
                     || accountNumber.charAt(i) > '9') {

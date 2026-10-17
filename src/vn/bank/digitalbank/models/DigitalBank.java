@@ -70,6 +70,13 @@ public class DigitalBank {
         }
     }
 
+    /**
+     * Check if customer is exited or not
+     * If yes, call customer.withdraw()
+     * @param customerId id
+     * @param accountNumber number of account
+     * @param amount to withdraw
+     */
     public void withdraw(String customerId
             , String accountNumber
             , double amount) {
@@ -81,6 +88,14 @@ public class DigitalBank {
         }
     }
 
+    /**
+     * Check if customer is exited or not
+     * If yes, call customer.transfer()
+     * @param customerId id
+     * @param accountReceiver number of account to receive
+     * @param accountTransfer number of account to transfer
+     * @param amount to transer
+     */
     public void transfer(String customerId
             , String accountReceiver
             , String accountTransfer
@@ -94,6 +109,13 @@ public class DigitalBank {
         }
     }
 
+    /**
+     * Check if customer is exited or not
+     * If yes, call customer.deposit()
+     * @param customerId id
+     * @param accountNumber number of account
+     * @param amount to deposit
+     */
     public void deposit(String customerId
             , String accountNumber
             , double amount) {

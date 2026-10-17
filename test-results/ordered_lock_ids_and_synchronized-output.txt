@@ -1,0 +1,42 @@
+/Users/ngandieukieu/Library/Java/JavaVirtualMachines/openjdk-26.0.2.1/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=54979 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/ngandieukieu/Desktop/Github/Concurrent-Banking-Transactions-Processing/out/production/Concurrent-Banking-Transactions-Processing Main
+Khách hàng:
+Customer1 001215000001
+Customer2 001215000002
+Tài khoản:
+001215000001 | 123456 | SAVINGS | 	10,000,000.00đ
+001215000002 | 123457 | SAVINGS | 	15,000,000.00đ
+Số dư ban đầu: 123456 là: 10,000,000.00
+Số dư ban đầu: 123457 là: 15,000,000.00
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457 . Số dư hiện tại: 9,000,000.00
+Giao dịch nhận 123457 thành công 1,000,000.00 . Số dư hiện tại: 16,000,000.00
+Giao dịch rút tài khoản 123456 thành công 3,000,000.00 . Số dư hiện tại: 6,000,000.00
+Giao dịch rút tài khoản 123456 thành công 3,000,000.00 . Số dư hiện tại: 3,000,000.00
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457 . Số dư hiện tại: 2,000,000.00
+Giao dịch nhận 123457 thành công 1,000,000.00 . Số dư hiện tại: 17,000,000.00
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457 . Số dư hiện tại: 1,000,000.00
+Giao dịch nhận 123457 thành công 1,000,000.00 . Số dư hiện tại: 18,000,000.00
+Giao dịch chuyển 123456 thành công 1,000,000.00 đến tài khoản 123457 . Số dư hiện tại: 00.00
+Giao dịch nhận 123457 thành công 1,000,000.00 . Số dư hiện tại: 19,000,000.00
+Giao dịch rút tài khoản 123456 không thành công 3,000,000.00 . Số dư hiện tại: 00.00
+Giao dịch rút tài khoản 123456 không thành công 3,000,000.00 . Số dư hiện tại: 00.00
+Giao dịch chuyển 123456 không thành công 1,000,000.00 đến tài khoản 123457 . Số dư hiện tại: 00.00
+Giao dịch rút tài khoản 123457 thành công 3,000,000.00 . Số dư hiện tại: 16,000,000.00
+Giao dịch rút tài khoản 123456 không thành công 3,000,000.00 . Số dư hiện tại: 00.00
+Giao dịch chuyển 123457 thành công 1,000,000.00 đến tài khoản 123456 . Số dư hiện tại: 15,000,000.00
+Giao dịch nhận 123456 thành công 1,000,000.00 . Số dư hiện tại: 1,000,000.00
+Giao dịch rút tài khoản 123457 thành công 3,000,000.00 . Số dư hiện tại: 12,000,000.00
+Giao dịch chuyển 123457 thành công 1,000,000.00 đến tài khoản 123456 . Số dư hiện tại: 11,000,000.00
+Giao dịch nhận 123456 thành công 1,000,000.00 . Số dư hiện tại: 2,000,000.00
+Giao dịch rút tài khoản 123457 thành công 3,000,000.00 . Số dư hiện tại: 8,000,000.00
+Giao dịch rút tài khoản 123457 thành công 3,000,000.00 . Số dư hiện tại: 5,000,000.00
+Giao dịch chuyển 123457 thành công 1,000,000.00 đến tài khoản 123456 . Số dư hiện tại: 4,000,000.00
+Giao dịch nhận 123456 thành công 1,000,000.00 . Số dư hiện tại: 3,000,000.00
+Giao dịch rút tài khoản 123457 thành công 3,000,000.00 . Số dư hiện tại: 1,000,000.00
+Giao dịch chuyển 123457 thành công 1,000,000.00 đến tài khoản 123456 . Số dư hiện tại: 00.00
+Giao dịch nhận 123456 thành công 1,000,000.00 . Số dư hiện tại: 4,000,000.00
+Giao dịch chuyển 123457 không thành công 1,000,000.00 đến tài khoản 123456 . Số dư hiện tại: 00.00
+=========Final Balance=========
+123456 : 4,000,000.00
+123457 : 00.00
+
+Process finished with exit code 0

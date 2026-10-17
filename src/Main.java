@@ -19,7 +19,6 @@ public class Main {
 
     /**
      * Hàm main
-     * @param args
      */
     public static void main(String[] args) {
 
@@ -98,9 +97,8 @@ public class Main {
             });
 
             futures.add(future);
-
-
         }
+
         for (int i = 1; i <= 10; i++) {
             int transactionId = i;
 
@@ -124,8 +122,6 @@ public class Main {
             });
 
             futures.add(future);
-
-
         }
 
         /**
@@ -134,7 +130,7 @@ public class Main {
         pool.shutdown();
 
         /**
-         * Check
+         * Check if task is run normally / interrupted / encounter error
          */
         for (Future<?> future : futures) {
             try {
