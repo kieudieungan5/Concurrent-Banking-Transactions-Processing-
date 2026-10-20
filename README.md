@@ -1,3 +1,20 @@
+#### Version 4 - Java JDBC API, MySQL, Transaction Management, and Multithreading
+
+Ensure atomicity and consistency across account balance updates & transactions records by JDBC API. Application must prevent incorrect balances updates, duplicate or inconsistent transactions. Besides, must improve reliability through exception handling, transaction recovery procedures, logging, uncertain transaction outcomes handling. Keep applications using multithread.
+
+Implementation
+
+-   Database Connectivity: JDBC API connects Java application & MySQL to store, retrieve data
+-   Atomic Transaction Management: Use Connection & disable auto commit mode by setAutoCommit(false). Execute balance updates & transaction adding within a Connection, only commit when all operations succeed. If an operation failed, execute rollback() to revert uncommited changes
+-   Error Handling & Logging: Handle SQL exceptions & transaction failures (errors during commit() & rollback()). Record transaction details & error info in logs to support troubleshooting, monitoring. A commit or roll back does not mean that transaction failed as database may have committed successfully before a connection failure prevented application from receiving information. So such outcomes are treated as uncertain & needed to be verified
+-   Concurrent Transaction Processing: Use newFixedThreadPool() to process transactions concurrently, combined with InnoDB row-locking & conditional balance updates
+
+Test Results
+
+-   [Main.java - Version 4](src/Main.java) Test with dataset (random 50 customers, 100 accounts, 1000 transactions) & large dataset (random 1000 customers, 2000 accounts, 20000 transactions)
+-   [database-query-small-dataset.txt - Version 4](test-results/version-4-JDBC-API-MySQL/database-query-small-dataset.txt) Dataset: small & Runtime: fast
+-   [database-query-large-dataset.txt - Version 4](test-results/version-4-JDBC-API-MySQL/database-query-large-dataset.txt) Dataset: large & Runtime: fast
+
 #### Version 3 - Generate ordered lock ids to accounts and synchronize transactions
 
 Use AtomicLong.incrementAndGet() to generate a unique lock id for each Account instance. During a transfer, thread acquires source and destination account locks in ascending lock id order, it completes transfer atomically then release both locks. Consistent lock ordering prevents deadlocks, but other threads have to wait until the required locks released
@@ -8,8 +25,8 @@ Implementation
 
 Test Results
 
--   [Account.java - Version 3](src/vn/bank/digitalbank/models/Account.java)
--   [ordered_lock_ids_and_synchronized-output.txt](test-results/ordered_lock_ids_and_synchronized-output.txt)
+-   [Account.java - Version 3](%5Bsrc/vn/bank/digitalbank/models/Account.java%5D(https://github.com/kieudieungan5/Concurrent-Banking-Transactions-Processing-/blob/95be465/src/vn/bank/digitalbank/models/Account.java))
+-   [ordered_lock_ids_and_synchronized-output.txt](%5Btest-results/ordered_lock_ids_and_synchronized-output.txt%5D(https://github.com/kieudieungan5/Concurrent-Banking-Transactions-Processing-/blob/95be465/test-results/ordered_lock_ids_and_synchronized-output.txt))
 
 Development Milestones
 

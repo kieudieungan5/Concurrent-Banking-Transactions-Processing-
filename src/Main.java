@@ -1,10 +1,11 @@
-import vn.bank.digitalbank.commons.Utils;
+import vn.bank.digitalbank.daos.AccountDAO;
 import vn.bank.digitalbank.models.Account;
-import vn.bank.digitalbank.models.Customer;
-import vn.bank.digitalbank.models.DigitalBank;
+import vn.bank.digitalbank.services.TransactionService;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,148 +13,113 @@ import java.util.concurrent.Future;
 
 public class Main {
 
-    /**
-     * Bank
-     */
-    private static final DigitalBank bank = new DigitalBank();
-
-    /**
-     * Hàm main
-     */
     public static void main(String[] args) {
-
-        /**
-         * Customer Test
-         */
-        Customer customer1 = new Customer("001215000001", "Customer1");
-        Customer customer2 = new Customer("001215000002", "Customer2");
-
-        DigitalBank.getCustomers().add(customer1);
-        DigitalBank.getCustomers().add(customer2);
-
-        System.out.println("Khách hàng: ");
-        DigitalBank.getCustomers().forEach((customer) -> System.out.println(customer.toString()));
-
-        Account account1 = new Account("001215000001"
-                , "123456"
-                , 10_000_000
-                , "SAVINGS");
-
-        Account account2 = new Account("001215000002"
-                , "123457"
-                , 15_000_000
-                , "SAVINGS");
-
-        DigitalBank.getAccounts().add(account1);
-        DigitalBank.getAccounts().add(account2);
-
-        System.out.println("Tài khoản: ");
-        DigitalBank.getAccounts().forEach((account) -> System.out.println(account.toString()));
-
 
         /**
          * ExecutorService: manage pool of workers
          * : execute transactions concurrently
          */
-        ExecutorService pool = Executors.newFixedThreadPool(4);
-
+        ExecutorService pool = Executors.newFixedThreadPool(10);
         List<Future<?>> futures = new ArrayList<>();
 
-        /**
-         * See initial balance
-         */
-        System.out.println("Số dư ban đầu: "
-                + account1.getAccountNumber()
-                + " là: "
-                + Utils.formatBalance(account1.getBalance()));
-        System.out.println("Số dư ban đầu: "
-                + account2.getAccountNumber()
-                + " là: "
-                + Utils.formatBalance(account2.getBalance()));
+        List<Account> accounts = AccountDAO.loadAccounts();
 
-        /**
-         * Transactions Test
-         */
-        for (int i = 1; i <= 10; i++) {
-            int transactionId = i;
-
-            Future<?> future = pool.submit(() -> {
-
-                if (transactionId % 2 == 0) {
-                    bank.withdraw(account1.getCustomerId(),
-                            account1.getAccountNumber(),
-                            3_000_000);
-                } else {
-                    bank.transfer(account1.getCustomerId(),
-                            account2.getAccountNumber(),
-                            account1.getAccountNumber(),
-                            1000_000);
-                }
-
-//                System.out.println(
-//                        "Task " + transactionId
-//                                + " chạy trên "
-//                                + Thread.currentThread().getName());
-            });
-
-            futures.add(future);
+        if (accounts.isEmpty()) {
+            System.out.println("Empty list");
+            return;
         }
 
-        for (int i = 1; i <= 10; i++) {
-            int transactionId = i;
+        Random rd = new Random();
 
-            Future<?> future = pool.submit(() -> {
+        final long TOTAL_TEST_TRANSACTIONS = 20_000;
 
-                if (transactionId % 2 == 0) {
-                    bank.withdraw(account2.getCustomerId(),
-                            account2.getAccountNumber(),
-                            3_000_000);
-                } else {
-                    bank.transfer(account2.getCustomerId(),
-                            account1.getAccountNumber(),
-                            account2.getAccountNumber(),
-                            1000_000);
-                }
+        for (int i = 0; i < TOTAL_TEST_TRANSACTIONS; i++) {
 
-//                System.out.println(
-//                        "Task " + transactionId
-//                                + " chạy trên "
-//                                + Thread.currentThread().getName());
-            });
+            // 1. Generate a random source account
+            int sourceIndex = rd.nextInt(accounts.size());
+            Account source = accounts.get(sourceIndex);
 
-            futures.add(future);
+            // 2. Generate a random amount
+            long amountLong = rd.nextLong(1_000_000, 10_000_001);
+
+            BigDecimal amount = BigDecimal.valueOf(amountLong);
+
+            // 3. Generate a random transaction
+            int operation = rd.nextInt(3);
+
+            Future<?> future;
+
+            switch (operation) {
+
+                case 0:
+                    // Transfer: Generate a random destination account
+                    // condition: do not duplicate source account
+                    if (accounts.size() < 2) {
+                        System.out.println("List only has 1 account");
+                        continue;
+                    }
+
+                    int destinationIndex;
+                    do {
+                        destinationIndex = rd.nextInt(accounts.size());
+                    } while (destinationIndex == sourceIndex);
+
+                    Account destination = accounts.get(destinationIndex);
+
+                    future = pool.submit(() -> {
+                        TransactionService.transfer(source.getCustomerId(),
+                                source.getAccountNumber(),
+                                destination.getAccountNumber(),
+                                amount);
+                    });
+
+                    futures.add(future);
+                    break;
+
+                case 1:
+                    // Withdraw:
+                    future = pool.submit(() -> {
+                        TransactionService.withdraw(source.getCustomerId(),
+                                source.getAccountNumber(),
+                                amount);
+                    });
+                    futures.add(future);
+                    break;
+
+                case 2:
+                    // Deposit
+                    future = pool.submit(() -> {
+                        TransactionService.deposit(source.getCustomerId(),
+                                source.getAccountNumber(),
+                                amount);
+                    });
+                    futures.add(future);
+                    break;
+
+            }
+
         }
 
         /**
-         * Stop accepting new task
+         * Stop accept new task
          */
         pool.shutdown();
 
         /**
-         * Check if task is run normally / interrupted / encounter error
+         * Check if task is run normally / interrupted / encounter
          */
         for (Future<?> future : futures) {
             try {
                 future.get();
 //                System.out.println("Task hoàn thành bình thường");
             } catch (InterruptedException e) {
-                System.out.println("Task bị ngắt");
+                System.out.println("Task is interrupted: " + e.getCause());
             } catch (ExecutionException e) {
-                System.out.println("Task gặp lỗi: " + e.getCause());
+                System.out.println("Task encounters error: " + e.getCause());
             }
 
         }
 
-        /**
-         * Check final balance
-         */
-        System.out.println("=========Final Balance=========");
-        System.out.println(account1.getAccountNumber() +
-                " : " +
-                Utils.formatBalance(account1.getBalance()));
-        System.out.println(account2.getAccountNumber() +
-                " : " +
-                Utils.formatBalance(account2.getBalance()));
     }
 
 }

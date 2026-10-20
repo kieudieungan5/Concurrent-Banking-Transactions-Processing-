@@ -1,9 +1,11 @@
 package vn.bank.digitalbank.commons;
 import vn.bank.digitalbank.models.Account;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class Utils {
 
@@ -66,15 +68,15 @@ public class Utils {
      * @param amount số thực cần định dạng
      * @return chuỗi
      */
-    public static String formatBalance(double amount) {
-
-        if(amount == 0) {
-            return "00.00";
-        }
+    public static String formatAmount(BigDecimal amount) {
 
         DecimalFormat df = new DecimalFormat("#,###.00");
         return df.format(amount);
 
+    }
+
+    public static String generateTransactionId() {
+        return UUID.randomUUID().toString();
     }
 
 }

@@ -1,44 +1,47 @@
 package vn.bank.digitalbank.models;
 
+import vn.bank.digitalbank.commons.TransactionStatus;
 import vn.bank.digitalbank.commons.TransactionType;
 import vn.bank.digitalbank.commons.Utils;
 
+import java.math.BigDecimal;
+
 public class Transaction {
 
+    private final String id;
     private final TransactionType type;
-    private final String accountNumber;
-    private final double amount;
-    private final String time;
-    private final String status;
+    private final String accountDestination;
+    private final String accountSource;
+    private final BigDecimal amount;
+    private final TransactionStatus status;
 
-    /**
-     * Create Transaction
-     */
-    public Transaction(TransactionType type, String accountNumber, double amount, String time, String status) {
+    public Transaction(TransactionType type,
+                       String accountSource,
+                       String accountDestination,
+                       BigDecimal amount,
+                       TransactionStatus status) {
+
+        this.id = Utils.generateTransactionId();
         this.type = type;
-        this.accountNumber = accountNumber;
+        this.accountDestination = accountDestination;
+        this.accountSource = accountSource;
         this.amount = amount;
-        this.time = Utils.getDateTime();
         this.status = status;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getAccountDestination() {
+        return accountDestination;
     }
 
-    public double getAmount(TransactionType type) {
-        if(type == TransactionType.DEPOSIT) {
-            return amount;
-        } else {
-            return -amount;
-        }
+    public String getAccountSource() {
+        return accountSource;
     }
 
-    public String getTime() {
-        return time;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public String status() {
+    public TransactionStatus status() {
         return status;
     }
 
@@ -46,21 +49,8 @@ public class Transaction {
         return type;
     }
 
-    @Override
-    public String toString() {
-        if(type == TransactionType.WITHDRAW
-            || type == TransactionType.TRANSFER ) {
-            return String.format("%10s | %10s | %30s |%30s",
-                    "[GD] " + getAccountNumber(),
-                    type,
-                    "-" + Utils.formatBalance(amount) + " đ",
-                    time);
-        } else {
-            return String.format("%10s | %10s | %30s |%30s",
-                    "[GD] " + getAccountNumber(),
-                    type,
-                    Utils.formatBalance(amount) + " đ",
-                    time);
-        }
+    public String getId() {
+        return id;
     }
+
 }
