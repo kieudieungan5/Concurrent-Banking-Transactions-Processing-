@@ -25,8 +25,8 @@ Implementation
 
 Test Results
 
--   [Account.java - Version 3](%5Bsrc/vn/bank/digitalbank/models/Account.java%5D(https://github.com/kieudieungan5/Concurrent-Banking-Transactions-Processing-/blob/95be465/src/vn/bank/digitalbank/models/Account.java))
--   [ordered_lock_ids_and_synchronized-output.txt](%5Btest-results/ordered_lock_ids_and_synchronized-output.txt%5D(https://github.com/kieudieungan5/Concurrent-Banking-Transactions-Processing-/blob/95be465/test-results/ordered_lock_ids_and_synchronized-output.txt))
+-   [Account.java - Version 3](https://github.com/kieudieungan5/Concurrent-Banking-Transactions-Processing-/blob/95be465/src/vn/bank/digitalbank/models/Account.java)
+-   [ordered_lock_ids_and_synchronized-output.txt](https://github.com/kieudieungan5/Concurrent-Banking-Transactions-Processing-/blob/95be465/test-results/ordered_lock_ids_and_synchronized-output.txt)
 
 Development Milestones
 
